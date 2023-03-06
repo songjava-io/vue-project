@@ -2,26 +2,24 @@
 import axios from 'axios'
 import { onMounted, ref, } from 'vue';
 import { useUserStore } from "../stores/user-store";
-import { useRouter } from "vue-router";
-const username = ref('kakao1@gmail.com');
+const account = ref('kakao1@gmail.com');
 const password = ref('test1234@@');
+const nickname = ref('');
 const userStore = useUserStore();
-const router = useRouter();
 
 // 현재 페이지가 마운트 될경우 이벤트 정의
 onMounted(() => {
+  console.log('user', userStore.user);
+  nickname.value = userStore.user.nickname;
 });
 
-const login = async () => {
+const save = async () => {
   const formData = new FormData();
-  formData.append("username", username.value);
+  formData.append("account", account.value);
   formData.append("password", password.value);
-  axios.post('/login', formData).then((res) => {
-    console.log('login response', res);
-    axios.defaults.headers.common['Authorization'] = `Bearer ${res.data}`;
-    userStore.setToken(res.data);
-    alert("로그인 성공.");
-    router.replace("/board/notice");
+  formData.append("nickname", nickname.value);
+  axios.post('/member/save', formData).then((res) => {
+    console.log('smember ave response', res);
   })
   .catch((err) => {
     console.log('error', err.response.data);
@@ -33,19 +31,24 @@ const login = async () => {
 
 <template>
   <v-sheet width="300" class="mx-auto">
-    <v-form fast-fail @submit.prevent="login">
+    <v-form fast-fail @submit.prevent="save">
       <v-text-field
-        v-model="username"
-        label="First name"
+        v-model="account"
+        label="계정"
       ></v-text-field>
 
       <v-text-field
         type="password"
         v-model="password"
-        label="Last name"
+        label="비밀번호"
       ></v-text-field>
 
-      <v-btn type="submit" block class="mt-2">로그인</v-btn>
+      <v-text-field
+        v-model="nickname"
+        label="닉네임"
+      ></v-text-field>      
+
+      <v-btn type="submit" block class="mt-2">회원가입</v-btn>
     </v-form>
   </v-sheet>
 </template>

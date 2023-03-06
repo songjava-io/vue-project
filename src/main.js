@@ -1,5 +1,6 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
+import { createPersistedStatePlugin } from "pinia-plugin-persistedstate-2";
 
 import App from "./App.vue";
 import router from "./router";
@@ -25,7 +26,11 @@ axios.defaults.baseURL = 'http://dev-spring.com:8080';
 
 const app = createApp(App);
 
-app.use(createPinia());
+const pinia = createPinia();
+const installPersistedStatePlugin = createPersistedStatePlugin();
+pinia.use((context) => installPersistedStatePlugin(context));
+
+app.use(pinia);
 app.use(router);
 app.use(vuetify);
 app.use(VueAxios, axios)
