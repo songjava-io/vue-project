@@ -33,5 +33,7 @@ const save = async () => {
       <v-file-input label="엑셀 선택" @change="handleFileUpload($event)"></v-file-input>
       <v-btn type="submit" block class="mt-2">업로드</v-btn>
     </v-form>
+
+    <a href="http://dev-spring.com:8080/event/download">엑셀 다운로드</a>
   </v-sheet>
 </template>
